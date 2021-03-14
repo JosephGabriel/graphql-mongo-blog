@@ -1,5 +1,7 @@
 const express = require("express");
 const { ApolloServer } = require("apollo-server-express");
+const mongoose = require("mongoose");
+require("dotenv/config");
 
 const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
@@ -13,4 +15,15 @@ const server = new ApolloServer({
 server.applyMiddleware({ app });
 
 const port = process.env.PORT || 8080;
-app.listen(port, () => console.log(`Server Rodando ${port}`));
+
+mongoose
+  .connect(process.env.DB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+  })
+  .then(() => {
+    app.listen(port, () => console.log(`Server Rodando ${port}`));
+  })
+  .catch((e) => console.log(`Erro na conexão com banco de dados: ${e}`));
