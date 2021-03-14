@@ -10,6 +10,10 @@ const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context({ req }) {
+    req.headers.authorization = `Bearer ${process.env.TOKEN}`;
+    return { req };
+  },
 });
 
 server.applyMiddleware({ app });
