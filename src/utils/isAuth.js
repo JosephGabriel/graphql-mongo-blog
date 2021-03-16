@@ -2,19 +2,23 @@ const jwt = require("jsonwebtoken");
 const { AuthenticationError } = require("apollo-server-express");
 require("dotenv/config");
 
-const authorize = (req) => {
+const authError = () => {
+  throw new AuthenticationError("Autenticação necessária");
+};
+
+const authorize = (req, verify = false) => {
   const authorizationHeader = req.headers.authorization;
 
   if (!authorizationHeader) {
     req.isAuth = false;
-    throw new AuthenticationError("Autenticação necessária");
+    return !verify ? authError() : req;
   }
 
   const token = authorizationHeader.replace("Bearer ", "");
 
   if (!token || token === "") {
     req.isAuth = false;
-    throw new AuthenticationError("Autenticação necessária");
+    return !verify ? authError() : req;
   }
 
   let decoded;
@@ -24,16 +28,19 @@ const authorize = (req) => {
 
     if (!decoded) {
       req.isAuth = false;
-      throw new AuthenticationError("Autenticação necessária");
+      return !verify ? authError() : req;
     }
 
     req.isAuth = true;
     req._id = decoded._id;
     req.email = decoded.email;
+    req.token = token;
+
+    return req;
   } catch (error) {
     req.isAuth = false;
 
-    throw new AuthenticationError("Token inválido");
+    return !verify ? authError() : req;
   }
 
   return req;
