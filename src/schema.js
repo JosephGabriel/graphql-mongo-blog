@@ -9,6 +9,9 @@ const typeDefs = gql`
   type Mutation {
     authUser(data: LoginInput!): User!
     signUp(data: AuthInput!): User!
+
+    updateUser(id: ID!, data: UpdateUserInput!): User!
+    updateUserEmPass(id: ID!, data: UpdateUserEmPassInput!): User!
   }
 
   type User {
@@ -29,6 +32,16 @@ const typeDefs = gql`
     name: String!
     email: String!
     password: String!
+  }
+
+  input UpdateUserInput {
+    name: String
+    lastname: String
+  }
+
+  input UpdateUserEmPassInput {
+    email: String
+    password: String
   }
 `;
 

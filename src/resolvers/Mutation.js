@@ -1,4 +1,6 @@
 const { AuthenticationError } = require("apollo-server-express");
+const authorize = require("../utils/isAuth");
+const userOwnership = require("../utils/tool");
 
 const User = require("../models/user");
 
@@ -47,6 +49,52 @@ const Mutation = {
 
       throw new Error(`Erro ao criar conta: ${error}`);
     }
+  },
+
+  async updateUser(parent, { id, data }, { req }, info) {
+    const request = authorize(req);
+
+    if (!userOwnership(request, id)) {
+      throw new AuthenticationError("Usuário inválido");
+    }
+
+    const user = await User.findOneAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          ...data,
+        },
+      },
+      { new: true }
+    );
+
+    return user;
+  },
+
+  async updateUserEmPass(parent, { id, data }, { req }, info) {
+    const request = authorize(req);
+
+    if (!userOwnership(request, id)) {
+      throw new AuthenticationError("Usuário inválido");
+    }
+
+    const user = await User.findOne({ _id: id });
+
+    if (!user) {
+      throw new AuthenticationError("Usuário inválido");
+    }
+
+    if (typeof data.email === "string") {
+      user.email = data.email;
+    }
+
+    if (typeof data.password === "string") {
+      user.password = data.password;
+    }
+
+    const result = await user.generateToken();
+
+    return result;
   },
 };
 
