@@ -12,6 +12,8 @@ const typeDefs = gql`
 
     updateUser(id: ID!, data: UpdateUserInput!): User!
     updateUserEmPass(id: ID!, data: UpdateUserEmPassInput!): User!
+
+    createPost(data: PostInput!): Post!
   }
 
   type User {
@@ -21,6 +23,17 @@ const typeDefs = gql`
     name: String!
     lastname: String
     token: String
+  }
+
+  type Post {
+    _id: ID!
+    title: String!
+    excerpt: String!
+    content: String!
+    createdAt: String
+    updatedAt: String
+    author: User!
+    status: PostStatus
   }
 
   input LoginInput {
@@ -42,6 +55,18 @@ const typeDefs = gql`
   input UpdateUserEmPassInput {
     email: String
     password: String
+  }
+
+  input PostInput {
+    title: String
+    excerpt: String
+    content: String
+    status: PostStatus
+  }
+
+  enum PostStatus {
+    Rascunho
+    Publicado
   }
 `;
 

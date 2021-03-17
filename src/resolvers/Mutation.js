@@ -3,6 +3,7 @@ const authorize = require("../utils/isAuth");
 const userOwnership = require("../utils/tool");
 
 const User = require("../models/user");
+const Post = require("../models/post");
 
 const Mutation = {
   async authUser(parent, { data }, ctx, info) {
@@ -93,6 +94,19 @@ const Mutation = {
     }
 
     const result = await user.generateToken();
+
+    return result;
+  },
+
+  async createPost(parent, { data }, { req }, info) {
+    const request = authorize(req);
+
+    const post = new Post({
+      ...data,
+      author: req._id,
+    });
+
+    const result = await post.save();
 
     return result;
   },
