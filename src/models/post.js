@@ -23,6 +23,11 @@ const postSchema = mongoose.Schema(
       ref: "User",
       require: true,
     },
+    category: {
+      type: Schema.Types.ObjectId,
+      ref: "Category",
+      require: true,
+    },
     status: {
       type: String,
       enum: ["Rascunho", "Publicado"],

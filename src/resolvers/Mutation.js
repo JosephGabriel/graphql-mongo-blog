@@ -4,6 +4,7 @@ const userOwnership = require("../utils/tool");
 
 const User = require("../models/user");
 const Post = require("../models/post");
+const Category = require("../models/category");
 
 const Mutation = {
   async authUser(parent, { data }, ctx, info) {
@@ -103,10 +104,23 @@ const Mutation = {
 
     const post = new Post({
       ...data,
-      author: req._id,
+      author: request._id,
     });
 
     const result = await post.save();
+
+    return result;
+  },
+
+  async createCategory(parent, { data }, { req }, info) {
+    const request = authorize(req);
+
+    const category = new Category({
+      ...data,
+      author: request._id,
+    });
+
+    const result = await category.save();
 
     return result;
   },
