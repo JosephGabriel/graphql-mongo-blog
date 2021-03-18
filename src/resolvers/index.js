@@ -2,12 +2,14 @@ const Query = require("./Query");
 const Mutation = require("./Mutation");
 const User = require("./User");
 const Post = require("./Post");
+const Category = require("./Category");
 
 const resolvers = {
+  Post,
+  User,
   Query,
   Mutation,
-  User,
-  Post,
+  Category,
 };
 
 module.exports = resolvers;

@@ -4,6 +4,9 @@ const typeDefs = gql`
   type Query {
     user(id: ID!): User!
     isAuth: User!
+    categories(id: ID): [Category!]!
+    post(id: ID!): Post!
+    posts(sort: SortInput, query: QueryByInput): [Post!]!
   }
 
   type Mutation {
@@ -24,7 +27,7 @@ const typeDefs = gql`
     name: String!
     lastname: String
     token: String
-    posts: [Post!]!
+    posts(sort: SortInput): [Post!]!
     categories: [Category!]!
   }
 
@@ -78,6 +81,18 @@ const typeDefs = gql`
 
   input CategoryInput {
     name: String!
+  }
+
+  input SortInput {
+    sortBy: String
+    order: String
+    limit: Int
+    skip: Int
+  }
+
+  input QueryByInput {
+    key: String!
+    value: String!
   }
 
   enum PostStatus {
