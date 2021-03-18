@@ -17,6 +17,8 @@ const typeDefs = gql`
     updateUserEmPass(id: ID!, data: UpdateUserEmPassInput!): User!
 
     createPost(data: PostInput!): Post!
+    updatePost(id: ID!, data: PostInput!): Post!
+
     createCategory(data: CategoryInput!): Category!
   }
 
@@ -41,6 +43,7 @@ const typeDefs = gql`
     author: User!
     category: Category!
     status: PostStatus
+    related(sort: SortInput): [Post!]!
   }
 
   type Category {

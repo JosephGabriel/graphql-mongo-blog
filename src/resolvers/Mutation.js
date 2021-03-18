@@ -112,6 +112,25 @@ const Mutation = {
     return result;
   },
 
+  async updatePost(parent, { id, data }, { req }, info) {
+    const request = authorize(req);
+    const post = await Post.findOne({ _id: id });
+
+    if (!userOwnership(request, post.author)) {
+      throw new AuthenticationError("Post inválido");
+    }
+
+    for (key in data) {
+      if (post[key] != data[key]) {
+        post[key] = data[key];
+      }
+    }
+
+    const result = await post.save();
+
+    return result;
+  },
+
   async createCategory(parent, { data }, { req }, info) {
     const request = authorize(req);
 

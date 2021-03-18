@@ -1,11 +1,17 @@
 const Post = require("../models/post");
 const Category = require("../models/category");
+const sortArgsHelper = require("../utils/sort");
 
 const User = {
-  async posts(parent, args, ctx, info) {
+  async posts(parent, { sort }, ctx, info) {
     const userId = parent._id;
 
-    const posts = await Post.find({ author: userId });
+    const sortArgs = sortArgsHelper(sort);
+
+    const posts = await Post.find({ author: userId })
+      .sort([[sortArgs.sortBy, sortArgs.order]])
+      .skip(sortArgs.skip)
+      .limit(sortArgs.limit);
 
     return posts;
   },
