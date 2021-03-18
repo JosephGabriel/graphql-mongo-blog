@@ -18,8 +18,11 @@ const typeDefs = gql`
 
     createPost(data: PostInput!): Post!
     updatePost(id: ID!, data: PostInput!): Post!
+    deletePost(id: ID!): Post
 
     createCategory(data: CategoryInput!): Category!
+    updateCategory(id: ID!, data: CategoryInput!): Category!
+    deleteCategory(id: ID!): Category!
   }
 
   type User {

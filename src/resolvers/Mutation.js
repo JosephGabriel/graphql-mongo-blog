@@ -131,6 +131,19 @@ const Mutation = {
     return result;
   },
 
+  async deletePost(parent, { id }, { req }, info) {
+    const request = authorize(req);
+    const post = await Post.findOne({ _id: id });
+
+    if (!userOwnership(request, post.author)) {
+      throw new AuthenticationError("Post inválido");
+    }
+
+    const result = await Post.findByIdAndRemove(id);
+
+    return result;
+  },
+
   async createCategory(parent, { data }, { req }, info) {
     const request = authorize(req);
 
@@ -140,6 +153,31 @@ const Mutation = {
     });
 
     const result = await category.save();
+
+    return result;
+  },
+
+  async updateCategory(parent, { id, data }, { req }, info) {
+    const request = authorize(req);
+
+    const category = await Category.findByIdAndUpdate(
+      { _id: id },
+      { $set: { ...data } },
+      { new: true }
+    );
+
+    return category;
+  },
+
+  async deleteCategory(parent, { id }, { req }, info) {
+    const request = authorize(req);
+    const category = await Category.findOne({ _id: id });
+
+    if (!userOwnership(request, category.author)) {
+      throw new AuthenticationError("Post inválido");
+    }
+
+    const result = await Category.findByIdAndRemove(id);
 
     return result;
   },

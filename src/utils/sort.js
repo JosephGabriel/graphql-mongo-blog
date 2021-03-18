@@ -9,3 +9,5 @@ const sortArgsHelper = (sort) => {
 
   return sortArgs;
 };
+
+module.exports = sortArgsHelper;

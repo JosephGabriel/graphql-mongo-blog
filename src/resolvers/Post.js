@@ -1,8 +1,9 @@
 const User = require("../models/user");
+const Post = require("../models/post");
 const Category = require("../models/category");
 const sortArgsHelper = require("../utils/sort");
 
-const Post = {
+const Post1 = {
   async author(parent, args, ctx, info) {
     const userId = parent.author;
 
@@ -19,7 +20,7 @@ const Post = {
     return category;
   },
 
-  async related(parent, args, ctx, info) {
+  async related(parent, { sort }, ctx, info) {
     const sortArgs = sortArgsHelper(sort);
 
     const posts = await Post.find({ category: parent.category })
@@ -31,4 +32,4 @@ const Post = {
   },
 };
 
-module.exports = Post;
+module.exports = Post1;
